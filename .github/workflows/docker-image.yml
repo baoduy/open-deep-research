@@ -1,0 +1,24 @@
+name: Build-Docker
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+concurrency:
+  group: build-docker-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  app:
+    uses: baoduy/ShareWorkflows/.github/workflows/docker-publish.yaml@main
+    with:
+      dockerFile: "Dockerfile"
+      context: "."
+      imageName: "baoduy2412/open-deep-research"
+      platforms: linux/arm64,linux/amd64
+      readmeFile: README.md
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
